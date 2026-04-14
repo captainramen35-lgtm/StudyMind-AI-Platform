@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyMind AI ⚡</title>
+  
+  <!-- SEO Best Practices -->
+  <meta name="description" content="StudyMind AI: Your AI-powered study partner. Generate flashcards, quizzes, summaries, and study plans instantly.">
+  
+  <!-- Font Integration -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Grain Overlay for Texture -->
+  <div class="grain-overlay"></div>
+  
+  <!-- Canvas for Floating Particles -->
+  <canvas id="particleCanvas"></canvas>
+
+  <nav class="navbar">
+    <div class="logo">StudyMind AI ⚡</div>
+    
+    <!-- Mobile Hamburger Menu Button -->
+    <button class="menu-toggle" id="menuToggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <div class="nav-links" id="navLinks">
+      <button class="nav-btn active" data-target="home"><i class="fa-solid fa-house"></i> Home</button>
+      <button class="nav-btn" data-target="chat"><i class="fa-solid fa-robot"></i> Tutor</button>
+      <button class="nav-btn" data-target="flashcards"><i class="fa-solid fa-layer-group"></i> Flashcards</button>
+      <button class="nav-btn" data-target="quiz"><i class="fa-solid fa-gamepad"></i> Quiz Me</button>
+      <button class="nav-btn" data-target="summary"><i class="fa-solid fa-bolt"></i> Summarizer</button>
+      <button class="nav-btn" data-target="planner"><i class="fa-solid fa-calendar-days"></i> Planner</button>
+    </div>
+  </nav>
+
+
+
+  <main class="main-content">
+    
+    <!-- 0. Home / Hero -->
+    <section id="home" class="tab-panel active">
+      <div class="hero">
+        <h1 class="glitch" data-text="Your AI Study Partner, Always On.">Your AI Study Partner, Always On.</h1>
+        <p class="subtitle">Harness the power of Groq's high-speed AI to supercharge your learning.</p>
+        <button class="glow-btn hero-cta" onclick="document.querySelector('.nav-btn[data-target=\'chat\']').click()">Start Studying &rarr;</button>
+      </div>
+    </section>
+
+    <!-- 1. Chat with AI Tutor -->
+    <section id="chat" class="tab-panel">
+      <div class="panel-card glass-panel">
+        <h2><i class="fa-solid fa-robot text-amber"></i> Consult the Tutor</h2>
+        <p class="tab-desc">Ask anything. The oracle awaits.</p>
+        
+        <div class="chat-window" id="chatWindow">
+          <!-- Chat messages go here -->
+          <div class="message ai-message">
+            <div class="message-content">Greetings, scholar. What shall we learn today?</div>
+          </div>
+        </div>
+        
+        <div class="input-area">
+          <input type="text" id="chatInput" placeholder="Type your question..." autocomplete="off">
+          <button id="sendChatBtn" class="glow-btn-small">Send</button>
+          <button id="stopChatBtn" class="glow-btn-small hidden" style="border-color: var(--error); color: var(--error);"><i class="fa-solid fa-stop"></i> Stop</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Flashcard Generator -->
+    <section id="flashcards" class="tab-panel">
+      <div class="panel-card glass-panel">
+        <h2><i class="fa-solid fa-layer-group text-amber"></i> Flashcard Forge</h2>
+        <p class="tab-desc">Paste your notes or a topic to forge 5 rapid-fire flashcards.</p>
+        
+        <textarea id="flashcardInput" rows="4" placeholder="e.g., Photosynthesis or paste your biology notes here..."></textarea>
+        <button id="generateFlashcardsBtn" class="glow-btn generate-btn">Conjure Cards</button>
+        
+        <div class="loader hidden" id="flashcardLoader">
+          <div class="shimmer-bone"></div>
+          <div class="shimmer-bone" style="width: 80%"></div>
+          <div class="shimmer-bone" style="width: 60%"></div>
+        </div>
+
+        <div class="flashcard-grid" id="flashcardResult">
+          <!-- Cards injected here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Quiz Me -->
+    <section id="quiz" class="tab-panel">
+      <div class="panel-card glass-panel">
+        <h2><i class="fa-solid fa-gamepad text-amber"></i> Trial of Knowledge</h2>
+        <p class="tab-desc">Enter a subject to generate a 5-question multiple choice trial.</p>
+        
+        <input type="text" id="quizInput" placeholder="e.g., World War II or Quantum Physics">
+        <button id="generateQuizBtn" class="glow-btn generate-btn">Start Trial</button>
+
+        <div class="loader hidden" id="quizLoader">
+           <div class="shimmer-bone" style="height: 100px;"></div>
+        </div>
+
+        <div class="quiz-container hidden" id="quizResult">
+          <!-- Quiz injected here -->
+          <h3 id="questionText">Question goes here?</h3>
+          <div class="options-grid" id="optionsGrid">
+            <!-- options here -->
+          </div>
+          <div class="quiz-progress">
+             Question <span id="currentQNum">1</span> / 5
+          </div>
+        </div>
+
+        <div class="quiz-score-screen hidden" id="quizScoreScreen">
+           <h3 class="glitch score-display">Score: <span id="finalScore">0</span>/5</h3>
+           <button class="glow-btn-small" id="retryQuizBtn">Another Trial</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Summarizer -->
+    <section id="summary" class="tab-panel">
+      <div class="panel-card glass-panel">
+        <h2><i class="fa-solid fa-bolt text-amber"></i> The Distiller</h2>
+        <p class="tab-desc">Paste long texts to distill them into crisp, golden knowledge bullets.</p>
+        
+        <textarea id="summaryInput" rows="6" placeholder="Paste the wall of text here..."></textarea>
+        <button id="generateSummaryBtn" class="glow-btn generate-btn">Distill Knowledge</button>
+        
+        <div class="loader hidden" id="summaryLoader">
+          <div class="shimmer-bone" style="height: 20px;"></div>
+          <div class="shimmer-bone" style="height: 20px;"></div>
+          <div class="shimmer-bone" style="height: 20px;"></div>
+          <div class="shimmer-bone" style="width: 70%; height: 20px;"></div>
+        </div>
+
+        <div class="summary-result hidden glass-panel" id="summaryOutputWrapper">
+           <ul id="summaryResult"></ul>
+           <button class="glow-btn-small copy-btn" id="copySummaryBtn">Copy to Clipboard</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. Study Planner -->
+    <section id="planner" class="tab-panel">
+      <div class="panel-card glass-panel">
+        <h2><i class="fa-solid fa-calendar-days text-amber"></i> Chronos Planner</h2>
+        <p class="tab-desc">Map out your study journey before exam day.</p>
+        
+        <div class="planner-inputs">
+          <input type="text" id="examName" placeholder="Exam Topic (e.g., Organic Chemistry)">
+          <input type="number" id="daysLeft" placeholder="Days left (e.g., 5)" min="1" max="30">
+        </div>
+        <textarea id="syllabusInput" rows="3" placeholder="Optional: Paste your syllabus or topics to cover..." style="margin-top: 15px;"></textarea>
+        <button id="generatePlannerBtn" class="glow-btn generate-btn">Generate Timeline</button>
+        
+        <div class="loader hidden" id="plannerLoader">
+          <div class="shimmer-bone" style="height: 40px; margin-bottom: 20px;"></div>
+          <div class="shimmer-bone" style="height: 40px; margin-bottom: 20px;"></div>
+          <div class="shimmer-bone" style="height: 40px;"></div>
+        </div>
+
+        <div class="timeline-container hidden" id="plannerResult">
+          <!-- Timeline injected here -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>Powered by <span class="neon-text">Groq</span> + Built for Students</p>
+  </footer>
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="toast-container"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
