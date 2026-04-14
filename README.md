@@ -2,6 +2,8 @@
 
 Welcome to **StudyMind AI**, a premium, single-page AI-powered study assistant designed with a unique "Dark Academia meets Futurism" aesthetic. Harnessing the blazing speed of the Groq API (powered by the `llama-3.3-70b-versatile` model), StudyMind serves as your personalized oracle and absolute focus hub for efficient learning.
 
+# link to our site : https://studymind-ai-platform.netlify.app/
+
 ## ✨ Core Features
 
 *   **Consult the Tutor**: An all-knowing scholarly AI tutor ready to answer questions, explain concepts, and guide your studies in a conversational flow with rich markdown structuring and a live typewriter effect.
